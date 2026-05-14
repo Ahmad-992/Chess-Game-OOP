@@ -1,45 +1,66 @@
+// Board.cpp — Updated with Exception Handling
+
 #include "Chess_Game_Header.h"
 
 Board::Board() { initilizeBoard(); }
 Board::~Board() {}
+
 void Board::initilizeBoard()
 {
-	for (int i = 0; i < 8; i++)
-		for (int j = 0; j < 8; j++)
-			grid[i][j] = nullptr;
-	grid[0][0] = new Rook('B', 0, 0, 'r');
-	grid[0][1] = new knight('B', 0, 1, 'n');
-	grid[0][2] = new Bishop('B', 0, 2, 'b');
-	grid[0][3] = new Queen('B', 0, 3, 'q');
-	grid[0][4] = new King('B', 0, 4, 'k');
-	grid[0][5] = new Bishop('B', 0, 5, 'b');
-	grid[0][6] = new knight('B', 0, 6, 'n');
-	grid[0][7] = new Rook('B', 0, 7, 'r');
-	grid[1][0] = new Pawn('B', 1, 0, 'p');
-	grid[1][1] = new Pawn('B', 1, 1, 'p');
-	grid[1][2] = new Pawn('B', 1, 2, 'p');
-	grid[1][3] = new Pawn('B', 1, 3, 'p');
-	grid[1][4] = new Pawn('B', 1, 4, 'p');
-	grid[1][5] = new Pawn('B', 1, 5, 'p');
-	grid[1][6] = new Pawn('B', 1, 6, 'p');
-	grid[1][7] = new Pawn('B', 1, 7, 'p');
-	grid[6][0] = new Pawn('W', 6, 0, 'P');
-	grid[6][1] = new Pawn('W', 6, 1, 'P');
-	grid[6][2] = new Pawn('W', 6, 2, 'P');
-	grid[6][3] = new Pawn('W', 6, 3, 'P');
-	grid[6][4] = new Pawn('W', 6, 4, 'P');
-	grid[6][5] = new Pawn('W', 6, 5, 'P');
-	grid[6][6] = new Pawn('W', 6, 6, 'P');
-	grid[6][7] = new Pawn('W', 6, 7, 'P');
-	grid[7][0] = new Rook('W', 7, 0, 'R');
-	grid[7][1] = new knight('W', 7, 1, 'N');
-	grid[7][2] = new Bishop('W', 7, 2, 'B');
-	grid[7][3] = new Queen('W', 7, 3, 'Q');
-	grid[7][4] = new King('W', 7, 4, 'K');
-	grid[7][5] = new Bishop('W', 7, 5, 'B');
-	grid[7][6] = new knight('W', 7, 6, 'N');
-	grid[7][7] = new Rook('W', 7, 7, 'R');
+	try
+	{
+		for (int i = 0; i < 8; i++)
+			for (int j = 0; j < 8; j++)
+				grid[i][j] = nullptr;
+
+		grid[0][0] = new Rook('B', 0, 0, 'r');
+		grid[0][1] = new knight('B', 0, 1, 'n');
+		grid[0][2] = new Bishop('B', 0, 2, 'b');
+		grid[0][3] = new Queen('B', 0, 3, 'q');
+		grid[0][4] = new King('B', 0, 4, 'k');
+		grid[0][5] = new Bishop('B', 0, 5, 'b');
+		grid[0][6] = new knight('B', 0, 6, 'n');
+		grid[0][7] = new Rook('B', 0, 7, 'r');
+		grid[1][0] = new Pawn('B', 1, 0, 'p');
+		grid[1][1] = new Pawn('B', 1, 1, 'p');
+		grid[1][2] = new Pawn('B', 1, 2, 'p');
+		grid[1][3] = new Pawn('B', 1, 3, 'p');
+		grid[1][4] = new Pawn('B', 1, 4, 'p');
+		grid[1][5] = new Pawn('B', 1, 5, 'p');
+		grid[1][6] = new Pawn('B', 1, 6, 'p');
+		grid[1][7] = new Pawn('B', 1, 7, 'p');
+		grid[6][0] = new Pawn('W', 6, 0, 'P');
+		grid[6][1] = new Pawn('W', 6, 1, 'P');
+		grid[6][2] = new Pawn('W', 6, 2, 'P');
+		grid[6][3] = new Pawn('W', 6, 3, 'P');
+		grid[6][4] = new Pawn('W', 6, 4, 'P');
+		grid[6][5] = new Pawn('W', 6, 5, 'P');
+		grid[6][6] = new Pawn('W', 6, 6, 'P');
+		grid[6][7] = new Pawn('W', 6, 7, 'P');
+		grid[7][0] = new Rook('W', 7, 0, 'R');
+		grid[7][1] = new knight('W', 7, 1, 'N');
+		grid[7][2] = new Bishop('W', 7, 2, 'B');
+		grid[7][3] = new Queen('W', 7, 3, 'Q');
+		grid[7][4] = new King('W', 7, 4, 'K');
+		grid[7][5] = new Bishop('W', 7, 5, 'B');
+		grid[7][6] = new knight('W', 7, 6, 'N');
+		grid[7][7] = new Rook('W', 7, 7, 'R');
+	}
+	catch (bad_alloc& e)
+	{
+		// If memory runs out while creating pieces, clean up and re-throw
+		cout << "Error: Failed to allocate memory for chess pieces." << endl;
+		for (int i = 0; i < 8; i++)
+			for (int j = 0; j < 8; j++)
+				if (grid[i][j] != nullptr)
+				{
+					delete grid[i][j];
+					grid[i][j] = nullptr;
+				}
+		throw; // re-throw to main
+	}
 }
+
 void Board::Dispaly()
 {
 	cout << "     a   b   c   d   e   f   g   h " << endl;
@@ -49,14 +70,30 @@ void Board::Dispaly()
 		cout << " " << 8 - i << " |";
 		for (int j = 0; j < 8; j++)
 		{
-			if (grid[i][j] == nullptr) cout << " . |";
-			else cout << " " << grid[i][j]->getSymbol() << " |";
+			if (grid[i][j] == nullptr)
+				cout << " . |";
+			else
+				cout << " " << grid[i][j]->getSymbol() << " |";
 		}
 		cout << endl << "   +---+---+---+---+---+---+---+---+" << endl;
 	}
 }
-Piece* Board::getPiece(int row, int col) { return grid[row][col]; }
-Piece* (*Board::getGrid())[8] { return grid; }
+
+Piece* Board::getPiece(int row, int col)
+{
+	// Throw out_of_range if coordinates are outside the board
+	if (row < 0 || row > 7 || col < 0 || col > 7)
+		throw out_of_range("Board coordinates out of range: (" +
+			to_string(row) + ", " + to_string(col) + ")");
+
+	return grid[row][col];
+}
+
+Piece* (*Board::getGrid())[8]
+{
+	return grid;
+}
+
 void Board::movePiece(int fromRow, int fromCol, int toRow, int toCol)
 {
 	if (grid[toRow][toCol] != nullptr)
@@ -79,43 +116,72 @@ void Board::movePiece(int fromRow, int fromCol, int toRow, int toCol)
 		grid[fromRow][fromCol] = nullptr;
 	}
 }
+
 void Board::PawnSpecial(char Color, int row, int col)
 {
 	char sym;
 	bool b = true;
-	do {
-		cout << "Wow. Your Pawn is now converting into higher piece. " << endl;
-		cout << "Enter the Symbol of your piece ";
-		cin >> sym;
-		if (Color == 'w' || Color == 'W')
+	do
+	{
+		try
 		{
-			if (sym == 'R') { delete grid[row][col]; grid[row][col] = new Rook(Color, row, col, sym); b = false; }
-			else if (sym == 'N') { delete grid[row][col]; grid[row][col] = new knight(Color, row, col, sym); b = false; }
-			else if (sym == 'B') { delete grid[row][col]; grid[row][col] = new Bishop(Color, row, col, sym); b = false; }
-			else if (sym == 'Q') { delete grid[row][col]; grid[row][col] = new Queen(Color, row, col, sym); b = false; }
-			else { cout << "Invalid." << endl; b = true; }
+			cout << "Wow. Your Pawn is now converting into a higher piece." << endl;
+			cout << "Enter the symbol of your piece: ";
+			cin >> sym;
+
+			if (Color == 'W')
+			{
+				if (sym != 'R' && sym != 'N' && sym != 'B' && sym != 'Q')
+					throw InvalidMoveException(
+						"Invalid symbol. White pieces must be R, N, B, or Q (uppercase).");
+
+				delete grid[row][col];
+				grid[row][col] = nullptr;
+
+				if      (sym == 'R') grid[row][col] = new Rook(Color, row, col, sym);
+				else if (sym == 'N') grid[row][col] = new knight(Color, row, col, sym);
+				else if (sym == 'B') grid[row][col] = new Bishop(Color, row, col, sym);
+				else if (sym == 'Q') grid[row][col] = new Queen(Color, row, col, sym);
+				b = false;
+			}
+			else
+			{
+				if (sym != 'r' && sym != 'n' && sym != 'b' && sym != 'q')
+					throw InvalidMoveException(
+						"Invalid symbol. Black pieces must be r, n, b, or q (lowercase).");
+
+				delete grid[row][col];
+				grid[row][col] = nullptr;
+
+				if      (sym == 'r') grid[row][col] = new Rook(Color, row, col, sym);
+				else if (sym == 'n') grid[row][col] = new knight(Color, row, col, sym);
+				else if (sym == 'b') grid[row][col] = new Bishop(Color, row, col, sym);
+				else if (sym == 'q') grid[row][col] = new Queen(Color, row, col, sym);
+				b = false;
+			}
 		}
-		else
+		catch (InvalidMoveException& e)
 		{
-			if (sym == 'r') { delete grid[row][col]; grid[row][col] = new Rook(Color, row, col, sym); b = false; }
-			else if (sym == 'n') { delete grid[row][col]; grid[row][col] = new knight(Color, row, col, sym); b = false; }
-			else if (sym == 'b') { delete grid[row][col]; grid[row][col] = new Bishop(Color, row, col, sym); b = false; }
-			else if (sym == 'q') { delete grid[row][col]; grid[row][col] = new Queen(Color, row, col, sym); b = false; }
-			else { cout << "Invalid." << endl; b = true; }
+			cout << "Error: " << e.getMessage() << " Please try again." << endl;
+			b = true;
 		}
 	} while (b);
 }
+
 bool Board::isKingInCheck(char Color)
 {
 	int r, c, row, col;
 	bool f = false;
+
 	for (r = 0; r < 8 && !f; r++)
 		for (c = 0; c < 8 && !f; c++)
 			if (grid[r][c] != nullptr)
 				if (grid[r][c]->getSymbol() == 'k' || grid[r][c]->getSymbol() == 'K')
 					if (grid[r][c]->getColor() == Color)
 					{ row = r; col = c; f = true; }
+
 	if (!f) return false;
+
 	for (int r1 = 0; r1 < 8; r1++)
 		for (int c1 = 0; c1 < 8; c1++)
 			if (grid[r1][c1] != nullptr)
@@ -124,6 +190,7 @@ bool Board::isKingInCheck(char Color)
 						return true;
 	return false;
 }
+
 bool Board::doesMoveResolveCheck(int fromRow, int fromCol, int toRow, int toCol, char color)
 {
 	Piece* destinationPiece = grid[toRow][toCol];
@@ -138,6 +205,7 @@ bool Board::doesMoveResolveCheck(int fromRow, int fromCol, int toRow, int toCol,
 	grid[fromRow][fromCol]->setCol(fromCol);
 	return stillInCheck;
 }
+
 bool Board::isInCheckAfterMove(int fromRow, int fromCol, int toRow, int toCol, char color)
 {
 	Piece* destinationPiece = grid[toRow][toCol];
@@ -152,6 +220,7 @@ bool Board::isInCheckAfterMove(int fromRow, int fromCol, int toRow, int toCol, c
 	grid[fromRow][fromCol]->setCol(fromCol);
 	return kingExposed;
 }
+
 bool Board::isCheckMate(char color)
 {
 	if (!isKingInCheck(color)) return false;
@@ -170,6 +239,7 @@ bool Board::isCheckMate(char color)
 		}
 	return true;
 }
+
 bool Board::isDraw()
 {
 	int whitePieces = 0, blackPieces = 0;
@@ -181,7 +251,7 @@ bool Board::isDraw()
 			char sym = grid[i][j]->getSymbol();
 			char col = grid[i][j]->getColor();
 			if (col == 'W') { whitePieces++; if (sym != 'K') whiteExtra = sym; }
-			else { blackPieces++; if (sym != 'k') blackExtra = sym; }
+			else            { blackPieces++; if (sym != 'k') blackExtra = sym; }
 		}
 	int totalPieces = whitePieces + blackPieces;
 	if (totalPieces == 2) return true;
@@ -203,9 +273,10 @@ bool Board::isDraw()
 					{
 						if (fromRow == toRow && fromCol == toCol) continue;
 						if (!grid[fromRow][fromCol]->isValidMove(toRow + 1, toCol + 1, grid)) continue;
-						if (!doesMoveResolveCheck(fromRow, fromCol, toRow, toCol, currentColor)) hasLegalMove = true;
+						if (!doesMoveResolveCheck(fromRow, fromCol, toRow, toCol, currentColor))
+							hasLegalMove = true;
 					}
-			}
+		}
 		if (!hasLegalMove) return true;
 	}
 	return false;
