@@ -1,10 +1,23 @@
+// Chess_Game_Header.h — Updated with Exception Handling
 
 #pragma once
-#include<iostream>
-#include<conio.h>
+#include <iostream>
+#include <conio.h>
 #include <cstdlib>
-#include<string>
+#include <string>
+#include <stdexcept>    // for out_of_range, bad_alloc
 using namespace std;
+
+// ── Custom Exception Class ───────────────────────────────────
+class InvalidMoveException
+{
+private:
+	string message;
+public:
+	InvalidMoveException(string msg) : message(msg) {}
+	string getMessage() const { return message; }
+};
+// ─────────────────────────────────────────────────────────────
 
 class Piece
 {
